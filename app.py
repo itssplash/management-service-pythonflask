@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 import pika
 import os
 import json
+from threading import Thread
 
 app = Flask(__name__)
 
@@ -44,11 +45,9 @@ def get_orders():
 
 if __name__ == '__main__':
     # Start consuming RabbitMQ messages in a background thread
-    from threading import Thread
     consume_thread = Thread(target=consume_orders)
     consume_thread.start()
 
     # Start Flask app
     port = int(os.getenv("PORT", 5000))  # Default to port 5000
     app.run(host='0.0.0.0', port=port)
-
